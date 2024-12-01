@@ -16,7 +16,7 @@ const client = new Client({
 const data = require('./data');
 
 function lookup(guildId, userId) {
-    identities = data.get(guildId);
+    identities = data.getKey(guildId);
     return identities in userId ? identities[userId] : null;
 }
 
@@ -100,7 +100,7 @@ client.on("interactionCreate", async (interaction) => {
             let embed;
             if (person == null) {
                 embed = new EmbedBuilder()
-                .setDescription('User not found');
+                .setDescription('User could not be located in identities list.');
             } else {
                 embed = new EmbedBuilder()
                 .setDescription(person[0]);
@@ -113,6 +113,10 @@ client.on("interactionCreate", async (interaction) => {
         } else if (interaction.commandName === "add-user") {
             await interaction.deferReply({ ephemeral: true });
             data.setKey(interaction.options.getUser('user'), interaction.options.getString('identity'));
+            await interaction.editReply('Success!');
+        } else if (interaction.commandName === "remove-user") {
+            await interaction.deferReply({ ephemeral: true });
+            data.delKey(interaction.options.getUser('user'));
             await interaction.editReply('Success!');
         }
          else {

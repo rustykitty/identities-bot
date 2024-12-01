@@ -16,7 +16,13 @@ module.exports = {
     get: (id) => {
         let result = cache.get(id);
         if (result == null) {
-            result = JSON.parse(fs.readFileSync(path.join('data', id)));
+            const filepath = path.join('data', id);
+            if (fs.existsSync(filepath)) {
+                result = JSON.parse(fs.readFileSync(path));
+            } else {
+                result = {}
+                fs.writeFileSync(filepath, result);
+            }
             cache.put(id, result);
         }
         return result;
@@ -30,8 +36,15 @@ module.exports = {
         cache.put(id, data);
         fs.writeFileSync(id, JSON.stringify(data));
     },
+    getKey: (id, key) => {
+        return this.get(id)[key];
+    },
     setKey: (id, key, value) => {
         this.get(id)[key] = value;
+        fs.writeFileSync(id, JSON.stringify(data));
+    },
+    delKey: (id, key) => {
+        delete this.get(id)[key];
         fs.writeFileSync(id, JSON.stringify(data));
     },
     delete: (id) => {
