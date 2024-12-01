@@ -16,7 +16,13 @@ class LinkedList {
         this.length = 0;
     }
     validate(node) {
-        if (node == undefined || !(node instanceof Node)) throw new Error('error');
+        if (node === undefined || node === null) {
+            throw new TypeError(`node cannot be ${node}`);
+        } else if (!(node instanceof Node)) {
+            throw new TypeError(`Expected Node, found ${typeof node} instead`);
+        } else if (node === this.head || node === this.tail) {
+            throw new RangeError('Cannot modify head/tail node');
+        }
     }
     addToHead(key, val) {
         let newNode = new Node(key, val, this.head, this.head.next);
@@ -42,14 +48,14 @@ class LinkedList {
     }
     /**
      * Remove a key from the linked list. 
-     * This function has no effect if the key does not exist in the linked lsit.
+     * This function has no effect if the key does not exist in the linked list.
      * @param {*} key 
      */
     removeKey(key) {
-        p = this.head;
-        while (p != null) {
-            if (p.key = key) {
-                this.removeNode(key);
+        let p = this.head;
+        while (p !== null) {
+            if (p.key === key) {
+                this.removeNode(p);
             }
             p = p.next;
         }

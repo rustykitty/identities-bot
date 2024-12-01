@@ -112,11 +112,11 @@ client.on("interactionCreate", async (interaction) => {
             await interaction.editReply('Cache succesfully cleared.');
         } else if (interaction.commandName === "add-user") {
             await interaction.deferReply({ ephemeral: true });
-            data.setKey(interaction.options.getUser('user'), interaction.options.getString('identity'));
+            data.setKey(interaction.guildId, interaction.options.getUser('user').id, interaction.options.getString('identity'));
             await interaction.editReply('Success!');
         } else if (interaction.commandName === "remove-user") {
             await interaction.deferReply({ ephemeral: true });
-            data.delKey(interaction.options.getUser('user'));
+            data.delKey(interaction.guildId, interaction.options.getUser('user').id);
             await interaction.editReply('Success!');
         }
          else {
